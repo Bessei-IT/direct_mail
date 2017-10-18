@@ -264,8 +264,8 @@ class Dmail extends BaseScriptClass
                 // Define settings for Date Picker
                 $typo3Settings = [
                     'datePickerUSmode' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['USdateFormat'] ? 1 : 0,
-                    'dateFormat'       => ['j-n-Y', 'G:i j-n-Y'],
-                    'dateFormatUS'     => ['n-j-Y', 'G:i n-j-Y'],
+                    'dateFormat' => ['j-n-Y', 'G:i j-n-Y'],
+                    'dateFormatUS' => ['n-j-Y', 'G:i n-j-Y'],
                 ];
                 $this->getPageRenderer()->addInlineSettingArray('', $typo3Settings);
             }
@@ -339,11 +339,11 @@ class Dmail extends BaseScriptClass
 			';
 
             $markers = [
-                'TITLE'         => '',
+                'TITLE' => '',
                 'FLASHMESSAGES' => '',
-                'CONTENT'       => '',
-                'WIZARDSTEPS'   => '',
-                'NAVIGATION'    => '',
+                'CONTENT' => '',
+                'WIZARDSTEPS' => '',
+                'NAVIGATION' => '',
             ];
 
             $docHeaderButtons = [
@@ -424,18 +424,18 @@ class Dmail extends BaseScriptClass
         // Set default values:
         $dmail = [];
         $dmail['sys_dmail']['NEW'] = [
-            'from_email'         => $indata['senderEmail'],
-            'from_name'          => $indata['senderName'],
-            'replyto_email'      => $this->params['replyto_email'],
-            'replyto_name'       => $this->params['replyto_name'],
-            'return_path'        => $this->params['return_path'],
-            'priority'           => $this->params['priority'],
-            'use_domain'         => $this->params['use_domain'],
-            'use_rdct'           => $this->params['use_rdct'] ?? 0,
-            'long_link_mode'     => $this->params['long_link_mode'] ?? 0,
-            'organisation'       => $this->params['organisation'],
+            'from_email' => $indata['senderEmail'],
+            'from_name' => $indata['senderName'],
+            'replyto_email' => $this->params['replyto_email'],
+            'replyto_name' => $this->params['replyto_name'],
+            'return_path' => $this->params['return_path'],
+            'priority' => $this->params['priority'],
+            'use_domain' => $this->params['use_domain'],
+            'use_rdct' => $this->params['use_rdct'] ?? 0,
+            'long_link_mode' => $this->params['long_link_mode'] ?? 0,
+            'organisation' => $this->params['organisation'],
             'authcode_fieldList' => $this->params['authcode_fieldList'],
-            'plainParams'        => '',
+            'plainParams' => '',
         ];
 
         // always plaintext
@@ -528,10 +528,10 @@ class Dmail extends BaseScriptClass
             $htmlmail->theParts['messageid'] = $htmlmail->messageid;
             $mailContent = base64_encode(serialize($htmlmail->theParts));
             $updateFields = [
-                'issent'             => 0,
-                'charset'            => $htmlmail->charset,
-                'mailContent'        => $mailContent,
-                'renderedSize'       => strlen($mailContent),
+                'issent' => 0,
+                'charset' => $htmlmail->charset,
+                'mailContent' => $mailContent,
+                'renderedSize' => strlen($mailContent),
                 'long_link_rdct_url' => $this->urlbase,
             ];
             $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
@@ -580,10 +580,10 @@ class Dmail extends BaseScriptClass
         $isExternalDirectMailRecord = false;
 
         $markers = [
-            'WIZARDSTEPS'   => '',
+            'WIZARDSTEPS' => '',
             'FLASHMESSAGES' => '',
-            'NAVIGATION'    => '',
-            'TITLE'         => '',
+            'NAVIGATION' => '',
+            'TITLE' => '',
         ];
 
         if ($this->CMD == 'delete') {
@@ -1195,15 +1195,17 @@ class Dmail extends BaseScriptClass
                 $result = $this->cmd_compileMailGroup($recipientGroups);
                 $queryInfo = $result['queryInfo'];
 
-                $distributionTime = intval(GeneralUtility::_GP('send_mail_datetime'));
+                $sendMailDateTime = GeneralUtility::_GP('send_mail_datetime');
+                $sendMailDateTime = strtotime($sendMailDateTime);
+                $distributionTime = intval($sendMailDateTime);
                 if ($distributionTime < time()) {
                     $distributionTime = time();
                 }
 
                 $updateFields = [
                     'recipientGroups' => implode(',', $recipientGroups),
-                    'scheduled'       => $distributionTime,
-                    'query_info'      => serialize($queryInfo),
+                    'scheduled' => $distributionTime,
+                    'query_info' => serialize($queryInfo),
                 ];
 
                 if (GeneralUtility::_GP('testmail')) {
@@ -1787,7 +1789,7 @@ class Dmail extends BaseScriptClass
             }
             $updateFields = [
                 'whichtables' => intval($whichTables),
-                'query'       => $this->MOD_SETTINGS['queryConfig'],
+                'query' => $this->MOD_SETTINGS['queryConfig'],
             ];
             $updateResult = $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
                 "sys_dmail_group",
